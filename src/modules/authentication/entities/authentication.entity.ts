@@ -3,7 +3,7 @@ import { Column, Entity } from 'typeorm';
 
 @Entity('authentication')
 export class AuthenticationEntity extends BaseEntity {
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column({ name: 'password_hash' })
