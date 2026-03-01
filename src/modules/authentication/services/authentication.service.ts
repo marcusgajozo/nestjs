@@ -34,6 +34,10 @@ export class AuthenticationService {
   }
 
   async signUp(signUpDto: SignUpDto) {
-    return 'Hello World!';
+    const user = this.authenticationRepository.create({
+      email: signUpDto.email,
+      passwordHash: await this.bcryptService.hash(signUpDto.password),
+    });
+    return user;
   }
 }
