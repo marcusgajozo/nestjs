@@ -9,6 +9,7 @@ import {
   DATABASE_PORT,
   DATABASE_USER,
 } from './common/constants/env';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import {
       synchronize: true,
     }),
     AuthenticationModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

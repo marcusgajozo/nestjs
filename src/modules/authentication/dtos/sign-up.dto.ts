@@ -1,13 +1,7 @@
-import { IsEmail, IsString, Length } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
+import { CreateUserDto } from 'src/modules/users/dtos/create-user.dto';
 
-export class SignUpDto {
-  @IsString()
-  name: string;
-
-  @IsString()
-  @Length(11)
-  phone: string;
-
+export class SignUpDto extends CreateUserDto {
   @IsEmail()
   email: string;
 
