@@ -11,6 +11,6 @@ export class AuthenticationEntity extends BaseEntity {
   passwordHash: string;
 
   @OneToOne(() => UserEntity)
-  @JoinColumn()
-  profile: UserEntity;
+  @JoinColumn({ name: 'user_id' })
+  user: UserEntity;
 }
