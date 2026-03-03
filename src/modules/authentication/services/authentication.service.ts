@@ -1,16 +1,15 @@
 import {
   ConflictException,
-  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from 'src/modules/users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { AuthenticationEntity } from '../entities/authentication.entity';
-import { HashingService } from './hashing.service';
 import { SignInDto } from '../dtos/sign-in.dto';
 import { SignUpDto } from '../dtos/sign-up.dto';
-import { UserEntity } from 'src/modules/users/entities/user.entity';
+import { AuthenticationEntity } from '../entities/authentication.entity';
+import { HashingService } from './hashing.service';
 
 @Injectable()
 export class AuthenticationService {
