@@ -1,0 +1,8 @@
+### Base URL
+@baseUrl = http://localhost:3000
+
+### Get all manual concepts
+# @name ManualConceptsModuleGetHello
+GET {{baseUrl}}/manual-concepts
+
+### Get manual concept by id
