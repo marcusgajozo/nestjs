@@ -1,15 +1,15 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { ProceduresService } from './procedures.service';
 import { CreateProcedureDto } from './dto/create-procedure.dto';
 import { UpdateProcedureDto } from './dto/update-procedure.dto';
+import { ProceduresService } from './procedures.service';
 
 @Controller('procedures')
 export class ProceduresController {
@@ -27,7 +27,7 @@ export class ProceduresController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.proceduresService.findOne(+id);
+    return this.proceduresService.findOne(id);
   }
 
   @Patch(':id')
@@ -35,11 +35,11 @@ export class ProceduresController {
     @Param('id') id: string,
     @Body() updateProcedureDto: UpdateProcedureDto,
   ) {
-    return this.proceduresService.update(+id, updateProcedureDto);
+    return this.proceduresService.update(id, updateProcedureDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.proceduresService.remove(+id);
+    return this.proceduresService.remove(id);
   }
 }

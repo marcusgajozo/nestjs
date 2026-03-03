@@ -12,6 +12,7 @@ import { AuthenticationEntity } from '../entities/authentication.entity';
 import { HashingService } from './hashing.service';
 import { I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/generated/i18n.generated';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthenticationService {
@@ -22,16 +23,17 @@ export class AuthenticationService {
     private readonly userEntityRepository: Repository<UserEntity>,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly bcryptService: HashingService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signIn(signInDto: SignInDto) {
     const { email, password } = signInDto;
 
-    const user = await this.authenticationRepository.findOne({
+    const auth = await this.authenticationRepository.findOne({
       where: { email },
     });
 
-    if (!user) {
+    if (!auth) {
       throw new UnauthorizedException(
         this.i18n.translate('validation.UNAUTHORIZED'),
       );
@@ -39,7 +41,7 @@ export class AuthenticationService {
 
     const isPasswordValid = await this.bcryptService.compare(
       password,
-      user?.passwordHash || '',
+      auth?.passwordHash || '',
     );
 
     if (!isPasswordValid) {
@@ -48,7 +50,11 @@ export class AuthenticationService {
       );
     }
 
-    return;
+    const payload = { email: auth.email, sub: auth.userId };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 
   async signUp(signUpDto: SignUpDto) {
@@ -80,6 +86,8 @@ export class AuthenticationService {
       ...partialSignUpDto,
     });
 
-    return;
+    return {
+      message: 'User created successfully',
+    };
   }
 }

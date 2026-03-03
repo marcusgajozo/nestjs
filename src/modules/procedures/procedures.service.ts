@@ -21,18 +21,18 @@ export class ProceduresService {
   }
 
   findAll() {
-    return `This action returns all procedures`;
+    return this.procedureRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} procedure`;
+  findOne(id: string) {
+    return this.procedureRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateProcedureDto: UpdateProcedureDto) {
-    return `This action updates a #${id} procedure`;
+  update(id: string, updateProcedureDto: UpdateProcedureDto) {
+    return this.procedureRepository.update(id, updateProcedureDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} procedure`;
+  remove(id: string) {
+    return this.procedureRepository.delete(id);
   }
 }
