@@ -4,12 +4,15 @@ import { UpdateProcedureDto } from './dto/update-procedure.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Procedure } from './entities/procedure.entity';
 import { Repository } from 'typeorm';
+import { I18nService } from 'nestjs-i18n';
+import { I18nTranslations } from 'src/generated/i18n.generated';
 
 @Injectable()
 export class ProceduresService {
   constructor(
     @InjectRepository(Procedure)
     private readonly procedureRepository: Repository<Procedure>,
+    private i18n: I18nService<I18nTranslations>,
   ) {}
 
   create(createProcedureDto: CreateProcedureDto) {
