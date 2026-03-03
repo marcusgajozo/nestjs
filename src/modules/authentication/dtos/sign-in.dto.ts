@@ -13,7 +13,11 @@ export class SignInDto {
   )
   email: string;
 
-  @IsString()
+  @IsString({
+    message: i18nValidationMessage<I18nTranslations>(
+      'validation.INVALID_STRING',
+    ),
+  })
   @IsNotEmpty({
     message: i18nValidationMessage<I18nTranslations>('validation.NOT_EMPTY'),
   })
