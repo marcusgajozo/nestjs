@@ -14,6 +14,8 @@ export type I18nTranslations = {
         "UNAUTHORIZED": string;
         "EMAIL_EXISTS": string;
         "INVALID_UUID": string;
+        "INVALID_INT": string;
+        "NOT_FOUND": string;
     };
 };
 /* prettier-ignore */

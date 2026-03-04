@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Procedure } from './entities/procedure.entity';
+import { ProcedureEntity } from './entities/procedure.entity';
 import { ProceduresController } from './procedures.controller';
 import { ProceduresService } from './procedures.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Procedure])],
+  imports: [TypeOrmModule.forFeature([ProcedureEntity])],
   controllers: [ProceduresController],
   providers: [ProceduresService],
 })

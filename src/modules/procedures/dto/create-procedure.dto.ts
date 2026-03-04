@@ -1,22 +1,36 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { i18nValidationMessage } from 'nestjs-i18n';
-import { I18nTranslations } from 'src/generated/i18n.generated';
+import { IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
+import { i18nValidationMessage } from 'src/common/helper/i18n-validation-message';
 
 export class CreateProcedureDto {
   @IsString({
-    message: i18nValidationMessage<I18nTranslations>(
-      'validation.INVALID_STRING',
-    ),
+    message: i18nValidationMessage('validation.INVALID_STRING'),
   })
   @IsNotEmpty({
-    message: i18nValidationMessage<I18nTranslations>('validation.NOT_EMPTY'),
+    message: i18nValidationMessage('validation.NOT_EMPTY'),
   })
   name: string;
 
   @IsString({
-    message: i18nValidationMessage<I18nTranslations>(
-      'validation.INVALID_STRING',
-    ),
+    message: i18nValidationMessage('validation.INVALID_STRING'),
   })
-  description: string;
+  @IsOptional()
+  description?: string;
+
+  @IsInt({
+    message: i18nValidationMessage('validation.INVALID_INT'),
+  })
+  @Min(0)
+  price: number;
+
+  @IsInt({
+    message: i18nValidationMessage('validation.INVALID_INT'),
+  })
+  @Min(0)
+  returnDays: number;
+
+  @IsInt({
+    message: i18nValidationMessage('validation.INVALID_INT'),
+  })
+  @Min(0)
+  durationMinutes?: number;
 }

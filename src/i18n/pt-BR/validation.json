@@ -6,5 +6,7 @@
   "MAX_LENGTH": "O campo {property} deve ter no máximo {constraint1} caracteres.",
   "UNAUTHORIZED": "Não autorizado.",
   "EMAIL_EXISTS": "Email já existe",
-  "INVALID_UUID": "O campo {property} deve ser um UUID válido."
+  "INVALID_UUID": "O campo {property} deve ser um UUID válido.",
+  "INVALID_INT": "O campo {property} deve ser um número inteiro válido.",
+  "NOT_FOUND": "Não encontrado."
 }
