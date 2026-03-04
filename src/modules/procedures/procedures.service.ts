@@ -6,6 +6,7 @@ import { Procedure } from './entities/procedure.entity';
 import { Repository } from 'typeorm';
 import { I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/generated/i18n.generated';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Injectable()
 export class ProceduresService {
@@ -20,8 +21,13 @@ export class ProceduresService {
     return this.procedureRepository.save(procedure);
   }
 
-  findAll() {
-    return this.procedureRepository.find();
+  findAll(paginationDto: PaginationDto) {
+    const { page = 1, limit = 10 } = paginationDto;
+
+    return this.procedureRepository.find({
+      skip: page - 1,
+      take: limit,
+    });
   }
 
   findOne(id: string) {

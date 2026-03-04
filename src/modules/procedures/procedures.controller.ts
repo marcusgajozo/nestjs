@@ -6,12 +6,14 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { VerifyUUIDIdPipe } from 'src/common/pipes/verify-uuid-id.pipe';
 import { CreateProcedureDto } from './dto/create-procedure.dto';
 import { UpdateProcedureDto } from './dto/update-procedure.dto';
 import { ProceduresService } from './procedures.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @ApiBearerAuth()
 @Controller('procedures')
@@ -24,8 +26,8 @@ export class ProceduresController {
   }
 
   @Get()
-  findAll() {
-    return this.proceduresService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.proceduresService.findAll(paginationDto);
   }
 
   @Get(':id')
