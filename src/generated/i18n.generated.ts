@@ -13,6 +13,7 @@ export type I18nTranslations = {
         "MAX_LENGTH": string;
         "UNAUTHORIZED": string;
         "EMAIL_EXISTS": string;
+        "INVALID_UUID": string;
     };
 };
 /* prettier-ignore */
