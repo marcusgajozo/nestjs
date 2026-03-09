@@ -1,6 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import {
+  PaginatedResponseDto,
+  PaginationQueryDto,
+} from 'src/common/dtos/pagination.dto';
 import { i18nValidationMessage } from 'src/common/helper/i18n-validation-message';
 import { Repository } from 'typeorm';
 import { CreateProcedureDto } from './dto/create-procedure.dto';
@@ -30,9 +33,8 @@ export class ProceduresService {
     void this.procedureRepository.save(procedure);
   }
 
-  async findAll(paginationDto: PaginationDto, userId: string) {
-    // TODO: to take class for pagination
-    const { page = 1, limit = 10 } = paginationDto;
+  async findAll(paginationQueryDto: PaginationQueryDto, userId: string) {
+    const { page = 1, limit = 10 } = paginationQueryDto;
 
     const [procedures, totalCount] =
       await this.procedureRepository.findAndCount({
@@ -41,15 +43,16 @@ export class ProceduresService {
         where: { user: { id: userId } },
       });
 
-    return {
-      items: procedures,
-      meta: {
+    const dataPaginated = new PaginatedResponseDto<ProcedureEntity>(
+      procedures,
+      {
         page,
         limit,
         totalCount,
-        totalPages: Math.ceil(totalCount / limit),
       },
-    };
+    );
+
+    return dataPaginated;
   }
 
   async findOne(id: string, userId: string) {

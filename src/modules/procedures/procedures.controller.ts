@@ -13,7 +13,7 @@ import { CreateProcedureDto } from './dto/create-procedure.dto';
 import { UpdateProcedureDto } from './dto/update-procedure.dto';
 import { ProceduresService } from './procedures.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import { PaginationQueryDto } from 'src/common/dtos/pagination.dto';
 import { User } from 'src/common/decorator/user.decorator';
 
 @ApiBearerAuth()
@@ -31,10 +31,10 @@ export class ProceduresController {
 
   @Get()
   findAll(
-    @Query() paginationDto: PaginationDto,
+    @Query() paginationQueryDto: PaginationQueryDto,
     @User('userId') userId: string,
   ) {
-    return this.proceduresService.findAll(paginationDto, userId);
+    return this.proceduresService.findAll(paginationQueryDto, userId);
   }
 
   @Get(':id')
