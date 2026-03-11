@@ -26,12 +26,13 @@ Content-Type: application/json
 }
 
 ### Request for Procedures Module
+
 ### get all procedures
 GET {{baseUrl}}/procedures
 Authorization: Bearer {{authToken}}
 
 ### get procedure by id
-@procedureId = 1
+@procedureId = bbfa76d1-35ed-49a2-862a-9a85f98fe1e8
 GET {{baseUrl}}/procedures/{{procedureId}}
 Authorization: Bearer {{authToken}}
 
@@ -50,18 +51,18 @@ Content-Type: application/json
 
 
 ### update procedure by id
-@procedureUpdateId = c87f8cae-8c1f-4159-b4fa-668e2f10b021
+@procedureUpdateId = bbfa76d1-35ed-49a2-862a-9a85f98fe1e8
 PATCH {{baseUrl}}/procedures/{{procedureUpdateId}}
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
     "name": "Procedure Name",
-    "description": "Procedure Description"
+    "price": 150000
 }
 
 ### delete procedure by id
-@procedureUpdateId = c87f8cae-8c1f-4159-b4fa-668e2f10b021
-DELETE {{baseUrl}}/procedures/{{procedureUpdateId}}
+@procedureDeleteId = 451bb39c-b6a0-498c-b427-5d2e3334b4be
+DELETE {{baseUrl}}/procedures/{{procedureDeleteId}}
 Authorization: Bearer {{authToken}}
 
