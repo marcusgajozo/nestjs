@@ -1,8 +1,67 @@
 ### Base URL
 @baseUrl = http://localhost:3000
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJzdWIiOiIxNTJmNTg4ZC0zOWY2LTQ1MGYtYmRkNC02ZDI2NzhkZDBhMjkiLCJpYXQiOjE3NzMxODc5MjEsImV4cCI6MTc3MzE5MTUyMX0.N2PsPGyG7BRekHjcD7aZ8p7YOljnovDXmbCldVArCyk
+@email = user@example.com
+@password = yourpassword
 
-### Get all manual concepts
-# @name ManualConceptsModuleGetHello
-GET {{baseUrl}}/manual-concepts
+### Sign Up (Registration)
+POST {{baseUrl}}/authentication/sign-up
+Content-Type: application/json
 
-### Get manual concept by id
+{
+    "name": "John Doe",
+    "email": "{{email}}",
+    "password": "{{password}}",
+    "passwordConfirm" : "{{password}}",
+    "phone": "1234567890"
+}
+
+### Sign In (Login)
+POST {{baseUrl}}/authentication/sign-in
+Content-Type: application/json
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}"
+}
+
+### Request for Procedures Module
+### get all procedures
+GET {{baseUrl}}/procedures
+Authorization: Bearer {{authToken}}
+
+### get procedure by id
+@procedureId = 1
+GET {{baseUrl}}/procedures/{{procedureId}}
+Authorization: Bearer {{authToken}}
+
+### create a new procedure
+POST {{baseUrl}}/procedures
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "name": "Procedure Name",
+    "description": "Procedure Description",
+    "price": 100000,
+    "returnDays": 7,
+    "durationMinutes": 120 
+}
+
+
+### update procedure by id
+@procedureUpdateId = c87f8cae-8c1f-4159-b4fa-668e2f10b021
+PATCH {{baseUrl}}/procedures/{{procedureUpdateId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "name": "Procedure Name",
+    "description": "Procedure Description"
+}
+
+### delete procedure by id
+@procedureUpdateId = c87f8cae-8c1f-4159-b4fa-668e2f10b021
+DELETE {{baseUrl}}/procedures/{{procedureUpdateId}}
+Authorization: Bearer {{authToken}}
+
