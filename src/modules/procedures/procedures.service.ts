@@ -17,7 +17,7 @@ export class ProceduresService {
     private readonly procedureRepository: Repository<ProcedureEntity>,
   ) {}
 
-  create(createProcedureDto: CreateProcedureDto, userId: string) {
+  async create(createProcedureDto: CreateProcedureDto, userId: string) {
     const { name, description, price, returnDays, durationMinutes } =
       createProcedureDto;
 
@@ -30,7 +30,7 @@ export class ProceduresService {
       user: { id: userId },
     });
 
-    void this.procedureRepository.save(procedure);
+    return await this.procedureRepository.save(procedure);
   }
 
   async findAll(paginationQueryDto: PaginationQueryDto, userId: string) {
@@ -43,16 +43,7 @@ export class ProceduresService {
         where: { user: { id: userId } },
       });
 
-    const dataPaginated = new PaginatedResponseDto<ProcedureEntity>(
-      procedures,
-      {
-        page,
-        limit,
-        totalCount,
-      },
-    );
-
-    return dataPaginated;
+    return { procedures, totalCount };
   }
 
   async findOne(id: string, userId: string) {
