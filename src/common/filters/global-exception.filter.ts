@@ -90,7 +90,15 @@ export class GlobalExceptionFilter implements ExceptionFilter {
           if (typeof value === 'string' && value.includes('|')) {
             const [translationKey, argsString] = value.split('|');
             let args: Record<string, unknown> = {};
-            args = JSON.parse(argsString) as Record<string, unknown>;
+
+            if (argsString) {
+              try {
+                args = JSON.parse(argsString) as Record<string, unknown>;
+              } catch {
+                args = {};
+              }
+            }
+
             args.property = property;
 
             messages.push(
@@ -99,8 +107,15 @@ export class GlobalExceptionFilter implements ExceptionFilter {
                 lang,
               }),
             );
+          } else if (typeof value === 'string') {
+            messages.push(
+              this.i18n.t(value, {
+                args: { property },
+                lang,
+              }),
+            );
           } else {
-            messages.push(value);
+            messages.push(String(value));
           }
         }
       }
