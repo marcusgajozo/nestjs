@@ -14,6 +14,7 @@ import { ProceduresModule } from './modules/procedures/procedures.module';
 import { UsersModule } from './modules/users/users.module';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
+import { ClientsModule } from './modules/clients/clients.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
     AuthenticationModule,
     UsersModule,
     ProceduresModule,
+    ClientsModule,
   ],
   controllers: [],
   providers: [
