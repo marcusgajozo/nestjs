@@ -10,6 +10,9 @@ import { SignInDto } from '../dtos/sign-in.dto';
 import { SignUpDto } from '../dtos/sign-up.dto';
 import { AuthenticationEntity } from '../entities/authentication.entity';
 import { HashingService } from './hashing.service';
+import { I18nService } from 'nestjs-i18n';
+import { I18nTranslations } from 'src/generated/i18n.generated';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthenticationService {
@@ -18,30 +21,40 @@ export class AuthenticationService {
     private readonly authenticationRepository: Repository<AuthenticationEntity>,
     @InjectRepository(UserEntity)
     private readonly userEntityRepository: Repository<UserEntity>,
+    private readonly i18n: I18nService<I18nTranslations>,
     private readonly bcryptService: HashingService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signIn(signInDto: SignInDto) {
     const { email, password } = signInDto;
 
-    const user = await this.authenticationRepository.findOne({
+    const auth = await this.authenticationRepository.findOne({
       where: { email },
     });
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+    if (!auth) {
+      throw new UnauthorizedException(
+        this.i18n.translate('validation.UNAUTHORIZED'),
+      );
     }
 
     const isPasswordValid = await this.bcryptService.compare(
       password,
-      user?.passwordHash || '',
+      auth?.passwordHash || '',
     );
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException(
+        this.i18n.translate('validation.UNAUTHORIZED'),
+      );
     }
 
-    return;
+    const payload = { email: auth.email, sub: auth.userId };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 
   async signUp(signUpDto: SignUpDto) {
@@ -60,7 +73,9 @@ export class AuthenticationService {
     });
 
     if (hasEmailRecord) {
-      throw new ConflictException('Email already exists');
+      throw new ConflictException(
+        this.i18n.translate('validation.EMAIL_EXISTS'),
+      );
     }
 
     const createUser = this.userEntityRepository.create(partialUser);
@@ -71,6 +86,8 @@ export class AuthenticationService {
       ...partialSignUpDto,
     });
 
-    return;
+    return {
+      message: 'User created successfully',
+    };
   }
 }

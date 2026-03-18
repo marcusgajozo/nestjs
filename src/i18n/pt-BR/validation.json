@@ -1,0 +1,12 @@
+{
+  "NOT_EMPTY": "O campo {property} não pode ser vazio.",
+  "INVALID_EMAIL": "O campo {property} deve ser um e-mail válido.",
+  "INVALID_STRING": "O campo {property} deve ser uma string.",
+  "MIN_LENGTH": "O campo {property} deve ter no mínimo {constraint1} caracteres.",
+  "MAX_LENGTH": "O campo {property} deve ter no máximo {constraint1} caracteres.",
+  "UNAUTHORIZED": "Não autorizado.",
+  "EMAIL_EXISTS": "Email já existe",
+  "INVALID_UUID": "O campo {property} deve ser um UUID válido.",
+  "INVALID_INT": "O campo {property} deve ser um número inteiro válido.",
+  "NOT_FOUND": "Não encontrado."
+}

@@ -6,13 +6,30 @@ import { AuthenticationService } from './services/authentication.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthenticationEntity } from './entities/authentication.entity';
 import { UserEntity } from '../users/entities/user.entity';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from '../../common/strategies/jwt.strategy';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AuthenticationEntity, UserEntity])],
+  imports: [
+    TypeOrmModule.forFeature([AuthenticationEntity, UserEntity]),
+    PassportModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET', 'secretKey'),
+        signOptions: { expiresIn: '1h' },
+      }),
+    }),
+  ],
   controllers: [AuthenticationController],
   providers: [
     { provide: HashingService, useClass: BcryptService },
     AuthenticationService,
+    JwtStrategy,
   ],
+  exports: [AuthenticationService],
 })
 export class AuthenticationModule {}
