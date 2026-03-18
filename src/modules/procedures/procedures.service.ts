@@ -34,7 +34,7 @@ export class ProceduresService {
   }
 
   async findAll(paginationQueryDto: PaginationQueryDto, userId: string) {
-    const { page = 1, limit = 10 } = paginationQueryDto;
+    const { page, limit } = paginationQueryDto;
 
     const [procedures, totalCount] =
       await this.procedureRepository.findAndCount({
