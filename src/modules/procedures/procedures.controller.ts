@@ -18,7 +18,7 @@ import {
   PaginatedResponseDto,
   PaginationQueryDto,
 } from 'src/common/dtos/pagination.dto';
-import { User } from 'src/common/decorator/user.decorator';
+import { UserAuth } from 'src/common/decorator/user-auth.decorator';
 import { ProcedureEntity } from './entities/procedure.entity';
 import { ResponseDto } from 'src/common/dtos/response.dto';
 
@@ -30,7 +30,7 @@ export class ProceduresController {
   @Post()
   async create(
     @Body() createProcedureDto: CreateProcedureDto,
-    @User('userId') userId: string,
+    @UserAuth('userId') userId: string,
   ) {
     await this.proceduresService.create(createProcedureDto, userId);
   }
@@ -38,7 +38,7 @@ export class ProceduresController {
   @Get()
   async findAll(
     @Query() paginationQueryDto: PaginationQueryDto,
-    @User('userId') userId: string,
+    @UserAuth('userId') userId: string,
   ) {
     const { procedures, totalCount } = await this.proceduresService.findAll(
       paginationQueryDto,
@@ -57,7 +57,7 @@ export class ProceduresController {
   @Get(':id')
   async findOne(
     @Param('id', VerifyUUIDIdPipe) id: string,
-    @User('userId') userId: string,
+    @UserAuth('userId') userId: string,
   ) {
     const procedure = await this.proceduresService.findOne(id, userId);
 
@@ -72,7 +72,7 @@ export class ProceduresController {
   async update(
     @Param('id', VerifyUUIDIdPipe) id: string,
     @Body() updateProcedureDto: UpdateProcedureDto,
-    @User('userId') userId: string,
+    @UserAuth('userId') userId: string,
   ) {
     await this.proceduresService.update(id, updateProcedureDto, userId);
   }
@@ -80,7 +80,7 @@ export class ProceduresController {
   @Delete(':id')
   async remove(
     @Param('id', VerifyUUIDIdPipe) id: string,
-    @User('userId') userId: string,
+    @UserAuth('userId') userId: string,
   ) {
     await this.proceduresService.remove(id, userId);
   }
