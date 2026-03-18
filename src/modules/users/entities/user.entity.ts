@@ -1,4 +1,5 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { ClientEntity } from 'src/modules/clients/entities/client.entity';
 import { ProcedureEntity } from 'src/modules/procedures/entities/procedure.entity';
 import { Column, Entity } from 'typeorm';
 import { OneToMany } from 'typeorm';
@@ -13,4 +14,7 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => ProcedureEntity, (procedure) => procedure.user)
   procedures: ProcedureEntity[];
+
+  @OneToMany(() => ClientEntity, (client) => client.user)
+  clients: ClientEntity[];
 }

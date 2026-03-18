@@ -1,5 +1,6 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Column, Entity } from 'typeorm';
+import { UserEntity } from 'src/modules/users/entities/user.entity';
+import { Column, Entity, JoinColumn, ManyToOne, RelationId } from 'typeorm';
 
 @Entity('clients')
 export class ClientEntity extends BaseEntity {
@@ -8,4 +9,11 @@ export class ClientEntity extends BaseEntity {
 
   @Column()
   phone: string;
+
+  @ManyToOne(() => UserEntity, (user) => user.clients, { nullable: false })
+  @JoinColumn({ name: 'user_id' })
+  user: UserEntity;
+
+  @RelationId((client: ClientEntity) => client.user)
+  userId: string;
 }
