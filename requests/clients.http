@@ -15,6 +15,23 @@ Content-Type: application/json
 
 {
   "name": "Client Name",
-  "email": "client@example.com",
-  "phone": ""
+  "phone": "67991768018"
 }
+
+### Update a client
+
+# @forceRef signIn
+PUT {{baseUrl}}/clients/cddda034-1321-4e56-87e3-99c87da0d288 HTTP/1.1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Client Name",
+  "phone": "67991768014"
+}
+
+### Get a client
+
+# @forceRef signIn
+GET {{baseUrl}}/clients/cddda034-1321-4e56-87e3-99c87da0d288 HTTP/1.1
+Authorization: Bearer {{accessToken}}
