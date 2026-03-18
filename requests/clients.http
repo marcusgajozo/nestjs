@@ -1,0 +1,20 @@
+@baseUrl = http://localhost:3000
+
+
+###
+
+# @import ./authentication.http
+ 
+
+### Create a client
+
+# @forceRef signIn
+POST {{baseUrl}}/clients HTTP/1.1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Client Name",
+  "email": "client@example.com",
+  "phone": ""
+}
