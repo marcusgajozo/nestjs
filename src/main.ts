@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { PORT } from './common/constants/env';
+import { API_PORT } from './common/constants/env';
 import { I18nValidationPipe } from 'nestjs-i18n';
 
 async function bootstrap() {
@@ -27,7 +27,7 @@ async function bootstrap() {
     jsonDocumentUrl: '/swagger-json',
   });
 
-  await app.listen(PORT);
+  await app.listen(API_PORT);
 }
 
 void bootstrap();

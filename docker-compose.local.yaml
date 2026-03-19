@@ -1,4 +1,16 @@
 services:
+  api-manicure:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    volumes:
+      - .:/api
+    ports:
+      - '${API_PORT:-3000}:3000'
+    depends_on:
+      - postgres-manicure-db
+
   postgres-manicure-db:
     image: postgres
     container_name: postgres-manicure-db
