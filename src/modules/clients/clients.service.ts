@@ -29,7 +29,7 @@ export class ClientsService {
     const { limit, page } = paginationQueryDto;
 
     const [clients, totalCount] = await this.clientRepository.findAndCount({
-      where: { userId },
+      where: { user: { id: userId } },
       skip: page - 1,
       take: limit,
     });
