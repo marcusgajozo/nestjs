@@ -1,19 +1,39 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthenticationService } from './services/authentication.service';
 import { SignInDto } from './dtos/sign-in.dto';
 import { SignUpDto } from './dtos/sign-up.dto';
 import { Public } from 'src/common/decorator/public.decorator';
 import { ResponseDto } from 'src/common/dtos/response.dto';
+import { I18nService } from 'nestjs-i18n';
+import { I18nTranslations } from 'src/generated/i18n.generated';
 
 @Controller('authentication')
 export class AuthenticationController {
-  constructor(private readonly authService: AuthenticationService) {}
+  constructor(
+    private readonly authService: AuthenticationService,
+    private readonly i18n: I18nService<I18nTranslations>,
+  ) {}
 
   @Public()
   @Post('sign-in')
   @HttpCode(HttpStatus.OK)
   async signIn(@Body() signInDto: SignInDto) {
     const result = await this.authService.signIn(signInDto);
+
+    if (!result) {
+      throw new UnauthorizedException(
+        this.i18n.translate('validation.UNAUTHORIZED'),
+      );
+    }
+
     return new ResponseDto(result);
   }
 
@@ -21,6 +41,12 @@ export class AuthenticationController {
   @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
   async signUp(@Body() signUpDto: SignUpDto) {
-    void (await this.authService.signUp(signUpDto));
+    const user = await this.authService.signUp(signUpDto);
+
+    if (!user) {
+      throw new ConflictException(
+        this.i18n.translate('validation.EMAIL_EXISTS'),
+      );
+    }
   }
 }
