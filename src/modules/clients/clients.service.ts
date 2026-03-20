@@ -39,7 +39,7 @@ export class ClientsService {
 
   async findOne(id: string, userId: string) {
     const client = await this.clientRepository.findOne({
-      where: { id, userId },
+      where: { id, user: { id: userId } },
     });
 
     return client;
