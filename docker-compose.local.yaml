@@ -1,3 +1,6 @@
+volumes:
+  pg-data:
+
 services:
   api-manicure:
     build:
@@ -12,7 +15,7 @@ services:
       - postgres-manicure-db
 
   postgres-manicure-db:
-    image: postgres
+    image: postgres:18-alpine
     container_name: postgres-manicure-db
     environment:
       POSTGRES_DB: ${DATABASE_NAME}
@@ -20,3 +23,5 @@ services:
       POSTGRES_USER: ${DATABASE_USER}
     ports:
       - '${DATABASE_PORT}:5432'
+    volumes:
+      - pg-data:/var/lib/postgresql/data
