@@ -1,11 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationQueryDto } from 'src/common/dtos/pagination.dto';
 import { Repository } from 'typeorm';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { ClientEntity } from './entities/client.entity';
-import { i18nValidationMessage } from 'src/common/helper/i18n-validation-message';
 
 @Injectable()
 export class ClientsService {
@@ -50,9 +49,7 @@ export class ClientsService {
     const client = await this.findOne(id, userId);
 
     if (!client) {
-      throw new NotFoundException(
-        i18nValidationMessage('validation.NOT_FOUND'),
-      );
+      return client;
     }
 
     const { name, phone } = updateClientDto;
@@ -66,12 +63,10 @@ export class ClientsService {
   }
 
   async remove(id: string, userId: string) {
-    const client = await this.clientRepository.findOne({
-      where: { id, userId },
-    });
+    const client = await this.findOne(id, userId);
 
     if (!client) {
-      return null;
+      return client;
     }
 
     return await this.clientRepository.remove(client);
