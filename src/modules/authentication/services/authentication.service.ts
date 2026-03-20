@@ -21,9 +21,9 @@ export class AuthenticationService {
     private readonly authenticationRepository: Repository<AuthenticationEntity>,
     @InjectRepository(UserEntity)
     private readonly userEntityRepository: Repository<UserEntity>,
-    private readonly i18n: I18nService<I18nTranslations>,
     private readonly bcryptService: HashingService,
     private readonly jwtService: JwtService,
+    private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
   async signIn(signInDto: SignInDto) {
