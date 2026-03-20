@@ -1,10 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  PaginatedResponseDto,
-  PaginationQueryDto,
-} from 'src/common/dtos/pagination.dto';
-import { i18nValidationMessage } from 'src/common/helper/i18n-validation-message';
+import { PaginationQueryDto } from 'src/common/dtos/pagination.dto';
 import { Repository } from 'typeorm';
 import { CreateProcedureDto } from './dto/create-procedure.dto';
 import { UpdateProcedureDto } from './dto/update-procedure.dto';
@@ -57,20 +53,18 @@ export class ProceduresService {
     updateProcedureDto: UpdateProcedureDto,
     userId: string,
   ) {
-    const { name, description, durationMinutes, price, returnDays } =
-      updateProcedureDto;
-
     const procedure = await this.findOne(id, userId);
 
     if (!procedure) {
-      throw new NotFoundException(
-        i18nValidationMessage('validation.NOT_FOUND'),
-      );
+      return procedure;
     }
+
+    const { name, description, durationMinutes, price, returnDays } =
+      updateProcedureDto;
 
     const updatedAt = new Date();
 
-    void this.procedureRepository.update(procedure.id, {
+    return await this.procedureRepository.update(procedure.id, {
       name,
       description,
       durationMinutes,
@@ -84,7 +78,7 @@ export class ProceduresService {
     const procedure = await this.findOne(id, userId);
 
     if (!procedure) {
-      throw new NotFoundException();
+      return procedure;
     }
 
     return this.procedureRepository.delete(procedure.id);

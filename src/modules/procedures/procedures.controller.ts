@@ -21,11 +21,16 @@ import {
 import { UserAuth } from 'src/common/decorator/user-auth.decorator';
 import { ProcedureEntity } from './entities/procedure.entity';
 import { ResponseDto } from 'src/common/dtos/response.dto';
+import { I18nService } from 'nestjs-i18n';
+import { I18nTranslations } from 'src/generated/i18n.generated';
 
 @ApiBearerAuth()
 @Controller('procedures')
 export class ProceduresController {
-  constructor(private readonly proceduresService: ProceduresService) {}
+  constructor(
+    private readonly proceduresService: ProceduresService,
+    private readonly i18n: I18nService<I18nTranslations>,
+  ) {}
 
   @Post()
   async create(
@@ -62,7 +67,7 @@ export class ProceduresController {
     const procedure = await this.proceduresService.findOne(id, userId);
 
     if (!procedure) {
-      throw new NotFoundException();
+      throw new NotFoundException(this.i18n.translate('validation.NOT_FOUND'));
     }
 
     return new ResponseDto(procedure);
@@ -74,7 +79,15 @@ export class ProceduresController {
     @Body() updateProcedureDto: UpdateProcedureDto,
     @UserAuth('userId') userId: string,
   ) {
-    await this.proceduresService.update(id, updateProcedureDto, userId);
+    const procedure = await this.proceduresService.update(
+      id,
+      updateProcedureDto,
+      userId,
+    );
+
+    if (!procedure) {
+      throw new NotFoundException(this.i18n.translate('validation.NOT_FOUND'));
+    }
   }
 
   @Delete(':id')
@@ -82,6 +95,10 @@ export class ProceduresController {
     @Param('id', VerifyUUIDIdPipe) id: string,
     @UserAuth('userId') userId: string,
   ) {
-    await this.proceduresService.remove(id, userId);
+    const procedure = await this.proceduresService.remove(id, userId);
+
+    if (!procedure) {
+      throw new NotFoundException(this.i18n.translate('validation.NOT_FOUND'));
+    }
   }
 }
