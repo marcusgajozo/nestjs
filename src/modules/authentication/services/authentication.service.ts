@@ -1,20 +1,13 @@
-import {
-  ConflictException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/modules/users/entities/user.entity';
+import { CreateUserDto } from 'src/modules/users/dtos/create-user.dto';
+import { UsersService } from 'src/modules/users/users.service';
 import { Repository } from 'typeorm';
 import { SignInDto } from '../dtos/sign-in.dto';
 import { SignUpDto } from '../dtos/sign-up.dto';
 import { AuthenticationEntity } from '../entities/authentication.entity';
 import { HashingService } from './hashing.service';
-import { I18nService } from 'nestjs-i18n';
-import { I18nTranslations } from 'src/generated/i18n.generated';
-import { JwtService } from '@nestjs/jwt';
-import { UsersService } from 'src/modules/users/users.service';
-import { CreateUserDto } from 'src/modules/users/dtos/create-user.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -24,7 +17,6 @@ export class AuthenticationService {
     private readonly userService: UsersService,
     private readonly bcryptService: HashingService,
     private readonly jwtService: JwtService,
-    private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
   async signIn(signInDto: SignInDto) {
