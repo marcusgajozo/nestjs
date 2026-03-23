@@ -1,0 +1,43 @@
+@baseUrl = http://localhost:3000
+
+
+###
+
+# @import ./authentication.http
+ 
+
+### Create a schedule
+
+# @forceRef signIn
+POST {{baseUrl}}/schedules HTTP/1.1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Client Name",
+  "phone": "67991768018"
+}
+
+### Update a schedule
+
+# @forceRef signIn
+PATCH {{baseUrl}}/schedules/b8604331-8e0f-47ca-84f6-2d1e554ea2a1 HTTP/1.1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Client Name",
+  "phone": "67991768014"
+}
+
+### Get a schedule
+
+# @forceRef signIn
+GET {{baseUrl}}/schedules/b8604331-8e0f-47ca-84f6-2d1e554ea2a1 HTTP/1.1
+Authorization: Bearer {{accessToken}}
+
+### Get all schedules
+
+# @forceRef signIn
+GET {{baseUrl}}/schedules HTTP/1.1
+Authorization: Bearer {{accessToken}}
