@@ -1,7 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationQueryDto } from 'src/common/dtos/pagination.dto';
-import { i18nValidationMessage } from 'src/common/helper/i18n-validation-message';
 import { Repository } from 'typeorm';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
@@ -11,63 +10,54 @@ import { ClientEntity } from './entities/client.entity';
 export class ClientsService {
   constructor(
     @InjectRepository(ClientEntity)
-    private readonly procedureRepository: Repository<ClientEntity>,
+    private readonly clientRepository: Repository<ClientEntity>,
   ) {}
 
   async create(createClientDto: CreateClientDto, userId: string) {
-    const { name, description, price, returnDays, durationMinutes } =
-      createClientDto;
+    const { name, phone } = createClientDto;
 
-    const client = this.procedureRepository.create({
+    const client = this.clientRepository.create({
       name,
-      description,
-      price,
-      returnDays,
-      durationMinutes,
+      phone,
       user: { id: userId },
     });
 
-    return await this.procedureRepository.save(client);
+    return await this.clientRepository.save(client);
   }
 
   async findAll(paginationQueryDto: PaginationQueryDto, userId: string) {
-    const { page = 1, limit = 10 } = paginationQueryDto;
+    const { limit, page } = paginationQueryDto;
 
-    const [clients, totalCount] = await this.procedureRepository.findAndCount({
+    const [clients, totalCount] = await this.clientRepository.findAndCount({
+      where: { user: { id: userId } },
       skip: page - 1,
       take: limit,
-      where: { user: { id: userId } },
     });
 
     return { clients, totalCount };
   }
 
   async findOne(id: string, userId: string) {
-    return await this.procedureRepository.findOne({
+    const client = await this.clientRepository.findOne({
       where: { id, user: { id: userId } },
     });
+
+    return client;
   }
 
   async update(id: string, updateClientDto: UpdateClientDto, userId: string) {
-    const { name, description, durationMinutes, price, returnDays } =
-      updateClientDto;
-
     const client = await this.findOne(id, userId);
 
     if (!client) {
-      throw new NotFoundException(
-        i18nValidationMessage('validation.NOT_FOUND'),
-      );
+      return client;
     }
 
+    const { name, phone } = updateClientDto;
     const updatedAt = new Date();
 
-    void this.procedureRepository.update(client.id, {
+    return await this.clientRepository.update(client.id, {
       name,
-      description,
-      durationMinutes,
-      price,
-      returnDays,
+      phone,
       updatedAt,
     });
   }
@@ -76,9 +66,9 @@ export class ClientsService {
     const client = await this.findOne(id, userId);
 
     if (!client) {
-      throw new NotFoundException();
+      return client;
     }
 
-    return this.procedureRepository.delete(client.id);
+    return await this.clientRepository.remove(client);
   }
 }

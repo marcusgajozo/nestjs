@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 import { i18nValidationMessage } from 'src/common/helper/i18n-validation-message';
 
-export class CreateUserDto {
+export class CreateScheduleDto {
   @IsString({
     message: i18nValidationMessage('validation.INVALID_STRING'),
   })

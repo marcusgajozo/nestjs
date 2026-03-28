@@ -22,7 +22,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prepare": "husky",
-    "commit": "pnpm cz"
+    "commit": "pnpm cz",
+    "docker:up": "docker compose -f docker-compose.local.yaml up",
+    "docker:down": "docker compose -f docker-compose.local.yaml down"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

@@ -2,18 +2,18 @@ import { BaseEntity } from 'src/common/entities/base.entity';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, RelationId } from 'typeorm';
 
-@Entity('clients')
-export class ClientEntity extends BaseEntity {
+@Entity('schedules')
+export class ScheduleEntity extends BaseEntity {
   @Column()
   name: string;
 
   @Column()
   phone: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.clients, { nullable: false })
+  @ManyToOne(() => UserEntity, (user) => user.schedules, { nullable: false })
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
-  @RelationId((client: ClientEntity) => client.user)
+  @RelationId((schedule: ScheduleEntity) => schedule.user)
   userId: string;
 }

@@ -1,27 +1,20 @@
-import {
-  ConflictException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/modules/users/entities/user.entity';
+import { CreateUserDto } from 'src/modules/users/dtos/create-user.dto';
+import { UsersService } from 'src/modules/users/users.service';
 import { Repository } from 'typeorm';
 import { SignInDto } from '../dtos/sign-in.dto';
 import { SignUpDto } from '../dtos/sign-up.dto';
 import { AuthenticationEntity } from '../entities/authentication.entity';
 import { HashingService } from './hashing.service';
-import { I18nService } from 'nestjs-i18n';
-import { I18nTranslations } from 'src/generated/i18n.generated';
-import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     @InjectRepository(AuthenticationEntity)
     private readonly authenticationRepository: Repository<AuthenticationEntity>,
-    @InjectRepository(UserEntity)
-    private readonly userEntityRepository: Repository<UserEntity>,
-    private readonly i18n: I18nService<I18nTranslations>,
+    private readonly userService: UsersService,
     private readonly bcryptService: HashingService,
     private readonly jwtService: JwtService,
   ) {}
@@ -34,20 +27,16 @@ export class AuthenticationService {
     });
 
     if (!auth) {
-      throw new UnauthorizedException(
-        this.i18n.translate('validation.UNAUTHORIZED'),
-      );
+      return auth;
     }
 
     const isPasswordValid = await this.bcryptService.compare(
       password,
-      auth?.passwordHash || '',
+      auth.passwordHash,
     );
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException(
-        this.i18n.translate('validation.UNAUTHORIZED'),
-      );
+      return null;
     }
 
     const payload = { email: auth.email, sub: auth.userId };
@@ -63,7 +52,7 @@ export class AuthenticationService {
       passwordHash: await this.bcryptService.hash(signUpDto.password),
     };
 
-    const partialUser = {
+    const partialUser: CreateUserDto = {
       name: signUpDto.name,
       phone: signUpDto.phone,
     };
@@ -73,21 +62,14 @@ export class AuthenticationService {
     });
 
     if (hasEmailRecord) {
-      throw new ConflictException(
-        this.i18n.translate('validation.EMAIL_EXISTS'),
-      );
+      return null;
     }
 
-    const createUser = this.userEntityRepository.create(partialUser);
-    await this.userEntityRepository.save(createUser);
+    const createUser = await this.userService.create(partialUser);
 
-    await this.authenticationRepository.save({
+    return await this.authenticationRepository.save({
       userId: createUser.id,
       ...partialSignUpDto,
     });
-
-    return {
-      message: 'User created successfully',
-    };
   }
 }
