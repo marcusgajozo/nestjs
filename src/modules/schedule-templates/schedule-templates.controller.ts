@@ -26,7 +26,7 @@ import { I18nTranslations } from 'src/generated/i18n.generated';
 import { ScheduleTemplatesService } from './schedule-templates.service';
 
 @ApiBearerAuth()
-@Controller('schedule-template-templates')
+@Controller('schedule-templates')
 export class ScheduleTemplatesController {
   constructor(
     private readonly scheduleTemplatesService: ScheduleTemplatesService,
