@@ -17,13 +17,12 @@ export class ScheduleTemplatesService {
     createScheduleTemplateDto: CreateScheduleTemplateDto,
     userId: string,
   ) {
-    const { dayOfWeek, endTime, slotDurationMinutes, startTime } =
-      createScheduleTemplateDto;
+    const { dayOfWeek, endTime, startTime } = createScheduleTemplateDto;
 
     const scheduleTemplate = this.scheduleTemplateRepository.create({
       dayOfWeek,
       endTime,
-      slotDurationMinutes,
+
       startTime,
       user: { id: userId },
     });
@@ -63,14 +62,13 @@ export class ScheduleTemplatesService {
       return scheduleTemplate;
     }
 
-    const { dayOfWeek, endTime, slotDurationMinutes, startTime } =
-      updateScheduleTemplateDto;
+    const { dayOfWeek, endTime, startTime } = updateScheduleTemplateDto;
     const updatedAt = new Date();
 
     return await this.scheduleTemplateRepository.update(scheduleTemplate.id, {
       dayOfWeek,
       endTime,
-      slotDurationMinutes,
+
       startTime,
       updatedAt,
     });

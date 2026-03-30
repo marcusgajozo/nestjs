@@ -13,9 +13,6 @@ export class ScheduleTemplateEntity extends BaseEntity {
   @Column({ type: 'time', name: 'end_time' })
   endTime: string;
 
-  @Column({ type: 'int', name: 'slot_duration_minutes', default: 60 })
-  slotDurationMinutes: number;
-
   @Column({ type: 'boolean', default: true, name: 'is_active' })
   isActive: boolean;
 
