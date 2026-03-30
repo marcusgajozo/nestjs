@@ -3,7 +3,7 @@ export enum DayOfWeek {
   monday = 1,
   tuesday = 2,
   wednesday = 3,
-  thursday,
-  friday,
-  Saturday,
+  thursday = 4,
+  friday = 5,
+  saturday = 6,
 }
