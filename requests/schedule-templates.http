@@ -15,10 +15,9 @@ Content-Type: application/json
   "password": "{{password}}"
 }
 
+### Create a schedule-template
 
-### Create a client
-
-POST {{baseUrl}}/clients HTTP/1.1
+POST {{baseUrl}}/schedule-templates HTTP/1.1
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
@@ -27,9 +26,9 @@ Content-Type: application/json
   "phone": "67991768018"
 }
 
-### Update a client
+### Update a schedule-template
 
-PATCH {{baseUrl}}/clients/b8604331-8e0f-47ca-84f6-2d1e554ea2a1 HTTP/1.1
+PATCH {{baseUrl}}/schedule-templates/b8604331-8e0f-47ca-84f6-2d1e554ea2a1 HTTP/1.1
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
@@ -38,12 +37,12 @@ Content-Type: application/json
   "phone": "67991768014"
 }
 
-### Get a client
+### Get a schedule-template
 
-GET {{baseUrl}}/clients/b8604331-8e0f-47ca-84f6-2d1e554ea2a1 HTTP/1.1
+GET {{baseUrl}}/schedule-templates/b8604331-8e0f-47ca-84f6-2d1e554ea2a1 HTTP/1.1
 Authorization: Bearer {{accessToken}}
 
-### Get all clients
+### Get all schedule-templates
 
-GET {{baseUrl}}/clients HTTP/1.1
+GET {{baseUrl}}/schedule-templates HTTP/1.1
 Authorization: Bearer {{accessToken}}
