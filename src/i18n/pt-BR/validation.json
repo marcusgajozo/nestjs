@@ -8,5 +8,7 @@
   "EMAIL_EXISTS": "Email já existe",
   "INVALID_UUID": "O campo {property} deve ser um UUID válido.",
   "INVALID_INT": "O campo {property} deve ser um número inteiro válido.",
-  "NOT_FOUND": "Não encontrado."
+  "NOT_FOUND": "Não encontrado.",
+  "INVALID_INTEGER": "O campo {property} deve ser um número inteiro.",
+  "INVALID_DATE_STRING": "O campo {property} deve ser uma string de data válida."
 }
