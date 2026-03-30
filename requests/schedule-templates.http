@@ -22,8 +22,9 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "name": "Client Name",
-  "phone": "67991768018"
+  "dayOfWeek": 1,
+  "startTime": "2024-05-15T14:30:00Z",
+  "endTime": "2024-05-15T15:30:00Z"
 }
 
 ### Update a schedule-template
