@@ -18,6 +18,7 @@ export type I18nTranslations = {
         "NOT_FOUND": string;
         "INVALID_INTEGER": string;
         "INVALID_DATE_STRING": string;
+        "INVALID_ENUM": string;
     };
 };
 /* prettier-ignore */

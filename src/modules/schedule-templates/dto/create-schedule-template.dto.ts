@@ -1,16 +1,10 @@
-import { IsDateString, IsInt, IsNotEmpty, Max, Min } from 'class-validator';
+import { IsEnum, IsISO8601, IsNotEmpty } from 'class-validator';
 import { i18nValidationMessage } from 'src/common/helper/i18n-validation-message';
-import { DayOfWeek } from '../enums/day-of-week.enum';
+import { DayOfWeek } from '../../../common/enums/day-of-week.enum';
 
 export class CreateScheduleTemplateDto {
-  @IsInt({
-    message: i18nValidationMessage('validation.INVALID_INTEGER'),
-  })
-  @Max(6, {
-    message: i18nValidationMessage('validation.INVALID_INTEGER'),
-  })
-  @Min(0, {
-    message: i18nValidationMessage('validation.INVALID_INTEGER'),
+  @IsEnum(DayOfWeek, {
+    message: i18nValidationMessage('validation.INVALID_ENUM'),
   })
   @IsNotEmpty({
     message: i18nValidationMessage('validation.NOT_EMPTY'),
@@ -20,7 +14,7 @@ export class CreateScheduleTemplateDto {
   @IsNotEmpty({
     message: i18nValidationMessage('validation.NOT_EMPTY'),
   })
-  @IsDateString(
+  @IsISO8601(
     {},
     {
       message: i18nValidationMessage('validation.INVALID_DATE_STRING'),
@@ -31,7 +25,7 @@ export class CreateScheduleTemplateDto {
   @IsNotEmpty({
     message: i18nValidationMessage('validation.NOT_EMPTY'),
   })
-  @IsDateString(
+  @IsISO8601(
     {},
     {
       message: i18nValidationMessage('validation.INVALID_DATE_STRING'),

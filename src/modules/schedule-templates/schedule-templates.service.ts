@@ -13,6 +13,10 @@ export class ScheduleTemplatesService {
     private readonly scheduleTemplateRepository: Repository<ScheduleTemplateEntity>,
   ) {}
 
+  private extractTime(isoString: string): string {
+    return isoString.substring(11, 19);
+  }
+
   async create(
     createScheduleTemplateDto: CreateScheduleTemplateDto,
     userId: string,
@@ -21,9 +25,8 @@ export class ScheduleTemplatesService {
 
     const scheduleTemplate = this.scheduleTemplateRepository.create({
       dayOfWeek,
-      endTime,
-
-      startTime,
+      endTime: this.extractTime(endTime),
+      startTime: this.extractTime(startTime),
       user: { id: userId },
     });
 
@@ -67,9 +70,8 @@ export class ScheduleTemplatesService {
 
     return await this.scheduleTemplateRepository.update(scheduleTemplate.id, {
       dayOfWeek,
-      endTime,
-
-      startTime,
+      endTime: endTime ? this.extractTime(endTime) : undefined,
+      startTime: startTime ? this.extractTime(startTime) : undefined,
       updatedAt,
     });
   }
