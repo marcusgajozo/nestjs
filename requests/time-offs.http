@@ -15,21 +15,21 @@ Content-Type: application/json
   "password": "{{password}}"
 }
 
-### Create a schedule-template
+### Create a time-off
 
-POST {{baseUrl}}/schedule-templates HTTP/1.1
+POST {{baseUrl}}/time-offs HTTP/1.1
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "dayOfWeek": "monday",
+  "dayOfWeek": 1,
   "startTime": "2026-03-31T23:11:05.946Z",
   "endTime": "2026-03-31T23:11:05.946Z"
 }
 
-### Update a schedule-template
+### Update a time-off
 
-PATCH {{baseUrl}}/schedule-templates/b8604331-8e0f-47ca-84f6-2d1e554ea2a1 HTTP/1.1
+PATCH {{baseUrl}}/time-offs/b8604331-8e0f-47ca-84f6-2d1e554ea2a1 HTTP/1.1
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
@@ -38,12 +38,11 @@ Content-Type: application/json
   "phone": "67991768014"
 }
 
-### Get a schedule-template
+### Get a time-off
 
-GET {{baseUrl}}/schedule-templates/b8604331-8e0f-47ca-84f6-2d1e554ea2a1 HTTP/1.1
+GET {{baseUrl}}/time-offs/b8604331-8e0f-47ca-84f6-2d1e554ea2a1 HTTP/1.1
 Authorization: Bearer {{accessToken}}
 
-### Get all schedule-templates
-
-GET {{baseUrl}}/schedule-templates HTTP/1.1
+### Get all time-off
+GET {{baseUrl}}/time-offs HTTP/1.1
 Authorization: Bearer {{accessToken}}
