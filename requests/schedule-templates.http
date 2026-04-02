@@ -4,7 +4,7 @@
 
 @accessToken = {{signIn.response.body.data.access_token}}
 
-@scheduleTemplateId = 32fd1bb5-a0c7-4d30-b1db-822fa795eeb2
+@scheduleTemplateId = ec7d4d56-0658-41d5-b8c0-71d6b7401f06
 
 ### Authentication sign in
 
@@ -25,8 +25,8 @@ Content-Type: application/json
 
 {
   "dayOfWeek": "monday",
-  "startTime": "2026-03-31T23:11:05.946Z",
-  "endTime": "2026-03-31T23:11:05.946Z"
+  "startTime": "19:11",
+  "endTime": "20:12"
 }
 
 ### Update a schedule-template
@@ -36,8 +36,8 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "dayOfWeek": "tuesday",
-  "endTime": "2026-03-31T23:11:05.946Z"
+  "dayOfWeek": "monday",
+  "endTime": "21:10"
 }
 
 ### Get a schedule-template
@@ -48,4 +48,8 @@ Authorization: Bearer {{accessToken}}
 ### Get all schedule-templates
 
 GET {{baseUrl}}/schedule-templates HTTP/1.1
+Authorization: Bearer {{accessToken}}
+
+### Delete a schedule-template
+DELETE {{baseUrl}}/schedule-templates/{{scheduleTemplateId}} HTTP/1.1
 Authorization: Bearer {{accessToken}}
