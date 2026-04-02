@@ -5,7 +5,6 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  NotFoundException,
   Param,
   Patch,
   Post,
@@ -17,12 +16,10 @@ import {
   PaginatedResponseDto,
   PaginationQueryDto,
 } from 'src/common/dtos/pagination.dto';
+import { ResponseDto } from 'src/common/dtos/response.dto';
 import { VerifyUUIDIdPipe } from 'src/common/pipes/verify-uuid-id.pipe';
 import { CreateScheduleTemplateDto } from './dto/create-schedule-template.dto';
 import { UpdateScheduleTemplateDto } from './dto/update-schedule-template.dto';
-import { ResponseDto } from 'src/common/dtos/response.dto';
-import { I18nService } from 'nestjs-i18n';
-import { I18nTranslations } from 'src/generated/i18n.generated';
 import { ScheduleTemplatesService } from './schedule-templates.service';
 
 @ApiBearerAuth()
@@ -30,7 +27,6 @@ import { ScheduleTemplatesService } from './schedule-templates.service';
 export class ScheduleTemplatesController {
   constructor(
     private readonly scheduleTemplatesService: ScheduleTemplatesService,
-    private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
   @Post()
@@ -39,7 +35,10 @@ export class ScheduleTemplatesController {
     @Body() createScheduleDto: CreateScheduleTemplateDto,
     @UserAuth('userId') userId: string,
   ) {
-    await this.scheduleTemplatesService.create(createScheduleDto, userId);
+    void (await this.scheduleTemplatesService.create(
+      createScheduleDto,
+      userId,
+    ));
   }
 
   @Get()
@@ -71,9 +70,6 @@ export class ScheduleTemplatesController {
       userId,
     );
 
-    if (!scheduleTemplate) {
-      throw new NotFoundException(this.i18n.translate('validation.NOT_FOUND'));
-    }
     return new ResponseDto(scheduleTemplate);
   }
 
@@ -97,13 +93,6 @@ export class ScheduleTemplatesController {
     @Param('id', VerifyUUIDIdPipe) id: string,
     @UserAuth('userId') userId: string,
   ) {
-    const scheduleTemplate = await this.scheduleTemplatesService.remove(
-      id,
-      userId,
-    );
-
-    if (!scheduleTemplate) {
-      throw new NotFoundException(this.i18n.translate('validation.NOT_FOUND'));
-    }
+    void (await this.scheduleTemplatesService.remove(id, userId));
   }
 }
