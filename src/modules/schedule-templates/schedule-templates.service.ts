@@ -129,11 +129,6 @@ export class ScheduleTemplatesService {
 
   async remove(id: string, userId: string) {
     const scheduleTemplate = await this.findOne(id, userId);
-
-    if (!scheduleTemplate) {
-      return scheduleTemplate;
-    }
-
     return await this.scheduleTemplateRepository.remove(scheduleTemplate);
   }
 }
