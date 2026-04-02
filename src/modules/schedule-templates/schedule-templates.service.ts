@@ -8,7 +8,7 @@ import { PaginationQueryDto } from 'src/common/dtos/pagination.dto';
 import { Repository } from 'typeorm';
 import { CreateScheduleTemplateDto } from './dto/create-schedule-template.dto';
 import { UpdateScheduleTemplateDto } from './dto/update-schedule-template.dto';
-import { ScheduleTemplateEntity } from './entities/schedule-templates.entity';
+import { ScheduleTemplateEntity } from './entities/schedule-template.entity';
 import { DayOfWeek } from 'src/common/enums/day-of-week.enum';
 import { I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/generated/i18n.generated';
