@@ -1,0 +1,92 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { UserAuth } from 'src/common/decorator/user-auth.decorator';
+import {
+  PaginatedResponseDto,
+  PaginationQueryDto,
+} from 'src/common/dtos/pagination.dto';
+import { ResponseDto } from 'src/common/dtos/response.dto';
+import { VerifyUUIDIdPipe } from 'src/common/pipes/verify-uuid-id.pipe';
+import { CreateAppointmentDto } from './dto/create-appointment.dto';
+import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { AppointmentsService } from './appointments.service';
+
+@ApiBearerAuth()
+@Controller('appointments')
+export class AppointmentsController {
+  constructor(private readonly appointmentsService: AppointmentsService) {}
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(
+    @Body() createScheduleDto: CreateAppointmentDto,
+    @UserAuth('userId') userId: string,
+  ) {
+    void (await this.appointmentsService.create(createScheduleDto, userId));
+  }
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async findAll(
+    @Query() paginationQueryDto: PaginationQueryDto,
+    @UserAuth('userId') userId: string,
+  ) {
+    const { limit, page } = paginationQueryDto;
+
+    const { appointments, totalCount } = await this.appointmentsService.findAll(
+      { limit, page },
+      userId,
+    );
+
+    return new PaginatedResponseDto(appointments, {
+      page,
+      limit,
+      totalCount,
+    });
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  async findOne(
+    @Param('id', VerifyUUIDIdPipe) id: string,
+    @UserAuth('userId') userId: string,
+  ) {
+    const appointment = await this.appointmentsService.findOne(id, userId);
+
+    return new ResponseDto(appointment);
+  }
+
+  @Patch(':id')
+  @HttpCode(HttpStatus.OK)
+  async update(
+    @Param('id', VerifyUUIDIdPipe) id: string,
+    @Body() updateAppointmentDto: UpdateAppointmentDto,
+    @UserAuth('userId') userId: string,
+  ) {
+    void (await this.appointmentsService.update(
+      id,
+      updateAppointmentDto,
+      userId,
+    ));
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(
+    @Param('id', VerifyUUIDIdPipe) id: string,
+    @UserAuth('userId') userId: string,
+  ) {
+    void (await this.appointmentsService.remove(id, userId));
+  }
+}
