@@ -84,15 +84,11 @@ export class ScheduleTemplatesController {
     @Body() updateScheduleTemplateDto: UpdateScheduleTemplateDto,
     @UserAuth('userId') userId: string,
   ) {
-    const scheduleTemplate = await this.scheduleTemplatesService.update(
+    void (await this.scheduleTemplatesService.update(
       id,
       updateScheduleTemplateDto,
       userId,
-    );
-
-    if (!scheduleTemplate) {
-      throw new NotFoundException(this.i18n.translate('validation.NOT_FOUND'));
-    }
+    ));
   }
 
   @Delete(':id')

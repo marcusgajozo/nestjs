@@ -1,20 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationQueryDto } from 'src/common/dtos/pagination.dto';
 import { Repository } from 'typeorm';
 import { CreateScheduleTemplateDto } from './dto/create-schedule-template.dto';
 import { UpdateScheduleTemplateDto } from './dto/update-schedule-template.dto';
 import { ScheduleTemplateEntity } from './entities/schedule-templates.entity';
+import { DayOfWeek } from 'src/common/enums/day-of-week.enum';
+import { I18nService } from 'nestjs-i18n';
+import { I18nTranslations } from 'src/generated/i18n.generated';
 
 @Injectable()
 export class ScheduleTemplatesService {
   constructor(
     @InjectRepository(ScheduleTemplateEntity)
     private readonly scheduleTemplateRepository: Repository<ScheduleTemplateEntity>,
+    private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
-  private extractTime(isoString: string): string {
-    return isoString.substring(11, 19);
+  async verifyConflictTemplate(
+    dayOfWeek: DayOfWeek,
+    startTime: string,
+    endTime: string,
+    userId: string,
+  ) {
+    const conflictCount = await this.scheduleTemplateRepository
+      .createQueryBuilder('template')
+
+      .where('template.user.id = :userId', { userId })
+      .andWhere('template.dayOfWeek = :dayOfWeek', { dayOfWeek })
+
+      .andWhere('template.startTime < :endTime', { endTime })
+      .andWhere('template.endTime > :startTime', { startTime })
+
+      .getCount();
+
+    return conflictCount > 0;
   }
 
   async create(
@@ -23,10 +47,23 @@ export class ScheduleTemplatesService {
   ) {
     const { dayOfWeek, endTime, startTime } = createScheduleTemplateDto;
 
+    const hasConflict = await this.verifyConflictTemplate(
+      dayOfWeek,
+      startTime,
+      endTime,
+      userId,
+    );
+
+    if (hasConflict) {
+      throw new ConflictException(
+        this.i18n.translate('validation.SCHEDULE_TEMPLATE_CONFLICT'),
+      );
+    }
+
     const scheduleTemplate = this.scheduleTemplateRepository.create({
       dayOfWeek,
-      endTime: this.extractTime(endTime),
-      startTime: this.extractTime(startTime),
+      endTime,
+      startTime,
       user: { id: userId },
     });
 
@@ -51,6 +88,10 @@ export class ScheduleTemplatesService {
       where: { id, user: { id: userId } },
     });
 
+    if (!scheduleTemplate) {
+      throw new NotFoundException(this.i18n.translate('validation.NOT_FOUND'));
+    }
+
     return scheduleTemplate;
   }
 
@@ -61,17 +102,27 @@ export class ScheduleTemplatesService {
   ) {
     const scheduleTemplate = await this.findOne(id, userId);
 
-    if (!scheduleTemplate) {
-      return scheduleTemplate;
+    const { dayOfWeek, endTime, startTime } = updateScheduleTemplateDto;
+
+    const hasConflict = await this.verifyConflictTemplate(
+      dayOfWeek ?? scheduleTemplate.dayOfWeek,
+      startTime ?? scheduleTemplate.startTime,
+      endTime ?? scheduleTemplate.endTime,
+      userId,
+    );
+
+    if (hasConflict) {
+      throw new ConflictException(
+        this.i18n.translate('validation.SCHEDULE_TEMPLATE_CONFLICT'),
+      );
     }
 
-    const { dayOfWeek, endTime, startTime } = updateScheduleTemplateDto;
     const updatedAt = new Date();
 
     return await this.scheduleTemplateRepository.update(scheduleTemplate.id, {
       dayOfWeek,
-      endTime: endTime ? this.extractTime(endTime) : undefined,
-      startTime: startTime ? this.extractTime(startTime) : undefined,
+      endTime,
+      startTime,
       updatedAt,
     });
   }
