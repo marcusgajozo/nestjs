@@ -16,6 +16,11 @@ export type I18nTranslations = {
         "INVALID_UUID": string;
         "INVALID_INT": string;
         "NOT_FOUND": string;
+        "INVALID_INTEGER": string;
+        "INVALID_DATE_STRING": string;
+        "INVALID_ENUM": string;
+        "START_BEFORE_END_TIME": string;
+        "SCHEDULE_TEMPLATE_CONFLICT": string;
     };
 };
 /* prettier-ignore */

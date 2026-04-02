@@ -1,20 +1,18 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { DayOfWeek } from 'src/common/enums/day-of-week.enum';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, RelationId } from 'typeorm';
 
 @Entity('schedule_templates')
 export class ScheduleTemplateEntity extends BaseEntity {
-  @Column({ type: 'int', name: 'day_of_week' })
-  dayOfWeek: number;
+  @Column({ type: 'enum', enum: DayOfWeek, name: 'day_of_week' })
+  dayOfWeek: DayOfWeek;
 
   @Column({ type: 'time', name: 'start_time' })
   startTime: string;
 
   @Column({ type: 'time', name: 'end_time' })
   endTime: string;
-
-  @Column({ type: 'int', name: 'slot_duration_minutes', default: 60 })
-  slotDurationMinutes: number;
 
   @Column({ type: 'boolean', default: true, name: 'is_active' })
   isActive: boolean;

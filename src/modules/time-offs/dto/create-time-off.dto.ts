@@ -1,14 +1,14 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 import { i18nValidationMessage } from 'src/common/helper/i18n-validation-message';
 
-export class CreateScheduleDto {
+export class CreateTimeOffDto {
   @IsString({
     message: i18nValidationMessage('validation.INVALID_STRING'),
   })
   @IsNotEmpty({
     message: i18nValidationMessage('validation.NOT_EMPTY'),
   })
-  name: string;
+  startDate: Date;
 
   @IsString({
     message: i18nValidationMessage('validation.INVALID_STRING'),
@@ -16,5 +16,13 @@ export class CreateScheduleDto {
   @IsNotEmpty({
     message: i18nValidationMessage('validation.NOT_EMPTY'),
   })
-  phone: string;
+  endDate: Date;
+
+  @IsString({
+    message: i18nValidationMessage('validation.INVALID_STRING'),
+  })
+  @IsNotEmpty({
+    message: i18nValidationMessage('validation.NOT_EMPTY'),
+  })
+  reason: string;
 }

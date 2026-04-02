@@ -18,28 +18,28 @@ import {
   PaginationQueryDto,
 } from 'src/common/dtos/pagination.dto';
 import { VerifyUUIDIdPipe } from 'src/common/pipes/verify-uuid-id.pipe';
-import { SchedulesService } from './schedules.service';
-import { CreateScheduleDto } from './dto/create-schedule.dto';
-import { UpdateScheduleDto } from './dto/update-schedule.dto';
+import { CreateTimeOffDto } from './dto/create-time-off.dto';
+import { UpdateTimeOffDto } from './dto/update-time-off.dto';
 import { ResponseDto } from 'src/common/dtos/response.dto';
 import { I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/generated/i18n.generated';
+import { TimeOffsService } from './time-offs.service';
 
 @ApiBearerAuth()
-@Controller('schedules')
-export class SchedulesController {
+@Controller('time-offs')
+export class TimeOffsController {
   constructor(
-    private readonly schedulesService: SchedulesService,
+    private readonly timeOffsService: TimeOffsService,
     private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(
-    @Body() createScheduleDto: CreateScheduleDto,
+    @Body() createTimeOffDto: CreateTimeOffDto,
     @UserAuth('userId') userId: string,
   ) {
-    await this.schedulesService.create(createScheduleDto, userId);
+    await this.timeOffsService.create(createTimeOffDto, userId);
   }
 
   @Get()
@@ -50,12 +50,12 @@ export class SchedulesController {
   ) {
     const { limit, page } = paginationQueryDto;
 
-    const { schedules, totalCount } = await this.schedulesService.findAll(
+    const { timeOffs, totalCount } = await this.timeOffsService.findAll(
       { limit, page },
       userId,
     );
 
-    return new PaginatedResponseDto(schedules, { page, limit, totalCount });
+    return new PaginatedResponseDto(timeOffs, { page, limit, totalCount });
   }
 
   @Get(':id')
@@ -64,28 +64,28 @@ export class SchedulesController {
     @Param('id', VerifyUUIDIdPipe) id: string,
     @UserAuth('userId') userId: string,
   ) {
-    const schedule = await this.schedulesService.findOne(id, userId);
+    const timeOff = await this.timeOffsService.findOne(id, userId);
 
-    if (!schedule) {
+    if (!timeOff) {
       throw new NotFoundException(this.i18n.translate('validation.NOT_FOUND'));
     }
-    return new ResponseDto(schedule);
+    return new ResponseDto(timeOff);
   }
 
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
   async update(
     @Param('id', VerifyUUIDIdPipe) id: string,
-    @Body() updateScheduleDto: UpdateScheduleDto,
+    @Body() updateTimeOffDto: UpdateTimeOffDto,
     @UserAuth('userId') userId: string,
   ) {
-    const schedule = await this.schedulesService.update(
+    const timeOff = await this.timeOffsService.update(
       id,
-      updateScheduleDto,
+      updateTimeOffDto,
       userId,
     );
 
-    if (!schedule) {
+    if (!timeOff) {
       throw new NotFoundException(this.i18n.translate('validation.NOT_FOUND'));
     }
   }
@@ -96,9 +96,9 @@ export class SchedulesController {
     @Param('id', VerifyUUIDIdPipe) id: string,
     @UserAuth('userId') userId: string,
   ) {
-    const schedule = await this.schedulesService.remove(id, userId);
+    const timeOff = await this.timeOffsService.remove(id, userId);
 
-    if (!schedule) {
+    if (!timeOff) {
       throw new NotFoundException(this.i18n.translate('validation.NOT_FOUND'));
     }
   }
