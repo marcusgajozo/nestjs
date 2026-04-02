@@ -4,6 +4,8 @@
 
 @accessToken = {{signIn.response.body.data.access_token}}
 
+@scheduleTemplateId = 32fd1bb5-a0c7-4d30-b1db-822fa795eeb2
+
 ### Authentication sign in
 
 # @name signIn
@@ -29,18 +31,18 @@ Content-Type: application/json
 
 ### Update a schedule-template
 
-PATCH {{baseUrl}}/schedule-templates/b8604331-8e0f-47ca-84f6-2d1e554ea2a1 HTTP/1.1
+PATCH {{baseUrl}}/schedule-templates/{{scheduleTemplateId}} HTTP/1.1
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "name": "Client Name",
-  "phone": "67991768014"
+  "dayOfWeek": "tuesday",
+  "endTime": "2026-03-31T23:11:05.946Z"
 }
 
 ### Get a schedule-template
 
-GET {{baseUrl}}/schedule-templates/b8604331-8e0f-47ca-84f6-2d1e554ea2a1 HTTP/1.1
+GET {{baseUrl}}/schedule-templates/{{scheduleTemplateId}} HTTP/1.1
 Authorization: Bearer {{accessToken}}
 
 ### Get all schedule-templates
