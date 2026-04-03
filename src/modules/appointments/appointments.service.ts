@@ -11,12 +11,15 @@ import { Repository } from 'typeorm';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { AppointmentEntity } from './entities/appointment.entity';
+import { TimeOffEntity } from '../time-offs/entities/time-off.entity';
 
 @Injectable()
 export class AppointmentsService {
   constructor(
     @InjectRepository(AppointmentEntity)
     private readonly appointmentRepository: Repository<AppointmentEntity>,
+    @InjectRepository(TimeOffEntity)
+    private readonly timeOffRepository: Repository<TimeOffEntity>,
     private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
@@ -27,16 +30,19 @@ export class AppointmentsService {
   ) {
     const conflictCount = await this.appointmentRepository
       .createQueryBuilder('appointment')
-
       .where('appointment.user.id = :userId', { userId })
-
       .andWhere('appointment.startDate < :endDate', { endDate })
       .andWhere('appointment.endDate > :startDate', { startDate })
-      .andWhere('appointment.deletedAt IS NULL')
-
       .getCount();
 
-    return conflictCount > 0;
+    const timeOffConflictCount = await this.timeOffRepository
+      .createQueryBuilder('timeOff')
+      .where('timeOff.user.id = :userId', { userId })
+      .andWhere('timeOff.startDate < :endDate', { endDate })
+      .andWhere('timeOff.endDate > :startDate', { startDate })
+      .getCount();
+
+    return conflictCount > 0 || timeOffConflictCount > 0;
   }
 
   async create(createAppointmentDto: CreateAppointmentDto, userId: string) {

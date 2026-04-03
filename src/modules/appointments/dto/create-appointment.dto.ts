@@ -7,6 +7,7 @@ import {
   IsUUID,
   ValidateIf,
 } from 'class-validator';
+import { IsBeforeDate } from 'src/common/decorator/is-before-date.decorator';
 import { i18nValidationMessage } from 'src/common/helper/i18n-validation-message';
 
 export class CreateAppointmentDto {
@@ -47,6 +48,9 @@ export class CreateAppointmentDto {
     {},
     { message: i18nValidationMessage('validation.INVALID_DATE_STRING') },
   )
+  @IsBeforeDate('endDate', {
+    message: i18nValidationMessage('validation.IVALID_BEFORE_DATE'),
+  })
   startDate: string;
 
   @IsNotEmpty({ message: i18nValidationMessage('validation.NOT_EMPTY') })
