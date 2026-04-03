@@ -26,17 +26,22 @@ export class ScheduleTemplatesService {
     startTime: string,
     endTime: string,
     userId: string,
+    scheduleTemplateId?: string,
   ) {
-    const conflictCount = await this.scheduleTemplateRepository
+    const scheduleTemplateQuery = this.scheduleTemplateRepository
       .createQueryBuilder('template')
-
       .where('template.user.id = :userId', { userId })
       .andWhere('template.dayOfWeek = :dayOfWeek', { dayOfWeek })
-
       .andWhere('template.startTime < :endTime', { endTime })
-      .andWhere('template.endTime > :startTime', { startTime })
+      .andWhere('template.endTime > :startTime', { startTime });
 
-      .getCount();
+    if (scheduleTemplateId) {
+      scheduleTemplateQuery.andWhere('template.id != :scheduleTemplateId', {
+        scheduleTemplateId,
+      });
+    }
+
+    const conflictCount = await scheduleTemplateQuery.getCount();
 
     return conflictCount > 0;
   }
@@ -109,6 +114,7 @@ export class ScheduleTemplatesService {
       startTime ?? scheduleTemplate.startTime,
       endTime ?? scheduleTemplate.endTime,
       userId,
+      id,
     );
 
     if (hasConflict) {
