@@ -74,7 +74,7 @@ export class AppointmentsService {
 
     if (hasConflict) {
       throw new ConflictException(
-        this.i18n.translate('validation.SCHEDULE_TEMPLATE_CONFLICT'),
+        this.i18n.translate('validation.APPOINTMENT_CONFLICT'),
       );
     }
 
@@ -136,6 +136,8 @@ export class AppointmentsService {
       procedureId,
       procedureName,
       procedurePrice,
+      notifyReturnClient,
+      statusAppointment,
     } = updateAppointmentDto;
 
     const hasConflict = await this.verifyConflictAppointment(
@@ -147,7 +149,7 @@ export class AppointmentsService {
 
     if (hasConflict) {
       throw new ConflictException(
-        this.i18n.translate('validation.SCHEDULE_TEMPLATE_CONFLICT'),
+        this.i18n.translate('validation.APPOINTMENT_CONFLICT'),
       );
     }
 
@@ -162,6 +164,8 @@ export class AppointmentsService {
       procedureName,
       procedurePrice,
       updatedAt,
+      notifyReturnClient,
+      statusAppointment,
       client: { id: clientId },
       procedure: { id: procedureId },
     });

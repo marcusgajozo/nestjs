@@ -21,6 +21,7 @@ export type I18nTranslations = {
         "INVALID_ENUM": string;
         "START_BEFORE_END_TIME": string;
         "SCHEDULE_TEMPLATE_CONFLICT": string;
+        "APPOINTMENT_CONFLICT": string;
         "IVALID_BEFORE_DATE": string;
     };
 };
