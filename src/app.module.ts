@@ -17,6 +17,7 @@ import { UsersModule } from './modules/users/users.module';
 import { join } from 'path';
 import { ScheduleTemplatesModule } from './modules/schedule-templates/schedule-templates.module';
 import { TimeOffsModule } from './modules/time-offs/time-offs.module';
+import { AppointmentsModule } from './modules/appointments/appointments.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { TimeOffsModule } from './modules/time-offs/time-offs.module';
     ClientsModule,
     ScheduleTemplatesModule,
     TimeOffsModule,
+    AppointmentsModule,
   ],
   controllers: [],
   providers: [

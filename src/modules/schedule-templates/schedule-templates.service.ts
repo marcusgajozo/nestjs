@@ -8,7 +8,7 @@ import { PaginationQueryDto } from 'src/common/dtos/pagination.dto';
 import { Repository } from 'typeorm';
 import { CreateScheduleTemplateDto } from './dto/create-schedule-template.dto';
 import { UpdateScheduleTemplateDto } from './dto/update-schedule-template.dto';
-import { ScheduleTemplateEntity } from './entities/schedule-templates.entity';
+import { ScheduleTemplateEntity } from './entities/schedule-template.entity';
 import { DayOfWeek } from 'src/common/enums/day-of-week.enum';
 import { I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from 'src/generated/i18n.generated';
@@ -26,17 +26,22 @@ export class ScheduleTemplatesService {
     startTime: string,
     endTime: string,
     userId: string,
+    scheduleTemplateId?: string,
   ) {
-    const conflictCount = await this.scheduleTemplateRepository
+    const scheduleTemplateQuery = this.scheduleTemplateRepository
       .createQueryBuilder('template')
-
       .where('template.user.id = :userId', { userId })
       .andWhere('template.dayOfWeek = :dayOfWeek', { dayOfWeek })
-
       .andWhere('template.startTime < :endTime', { endTime })
-      .andWhere('template.endTime > :startTime', { startTime })
+      .andWhere('template.endTime > :startTime', { startTime });
 
-      .getCount();
+    if (scheduleTemplateId) {
+      scheduleTemplateQuery.andWhere('template.id != :scheduleTemplateId', {
+        scheduleTemplateId,
+      });
+    }
+
+    const conflictCount = await scheduleTemplateQuery.getCount();
 
     return conflictCount > 0;
   }
@@ -109,6 +114,7 @@ export class ScheduleTemplatesService {
       startTime ?? scheduleTemplate.startTime,
       endTime ?? scheduleTemplate.endTime,
       userId,
+      id,
     );
 
     if (hasConflict) {
