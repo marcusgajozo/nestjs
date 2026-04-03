@@ -1,5 +1,5 @@
 import { IsEnum, IsMilitaryTime, IsNotEmpty } from 'class-validator';
-import { IsBefore } from 'src/common/decorator/is-before.decorator';
+import { IsBeforeTime } from 'src/common/decorator/is-before-time.decorator';
 import { i18nValidationMessage } from 'src/common/helper/i18n-validation-message';
 import { DayOfWeek } from '../../../common/enums/day-of-week.enum';
 
@@ -18,7 +18,7 @@ export class CreateScheduleTemplateDto {
   @IsMilitaryTime({
     message: i18nValidationMessage('validation.INVALID_DATE_STRING'),
   })
-  @IsBefore('endTime', {
+  @IsBeforeTime('endTime', {
     message: i18nValidationMessage('validation.START_BEFORE_END_TIME'),
   })
   startTime: string;
