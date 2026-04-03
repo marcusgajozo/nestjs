@@ -27,13 +27,21 @@ export class AppointmentsService {
     startDate: string,
     endDate: string,
     userId: string,
+    appointmentId?: string,
   ) {
-    const conflictCount = await this.appointmentRepository
+    const appointmentQuery = this.appointmentRepository
       .createQueryBuilder('appointment')
       .where('appointment.user.id = :userId', { userId })
       .andWhere('appointment.startDate < :endDate', { endDate })
-      .andWhere('appointment.endDate > :startDate', { startDate })
-      .getCount();
+      .andWhere('appointment.endDate > :startDate', { startDate });
+
+    if (appointmentId) {
+      appointmentQuery.andWhere('appointment.id != :appointmentId', {
+        appointmentId,
+      });
+    }
+
+    const conflictCount = await appointmentQuery.getCount();
 
     const timeOffConflictCount = await this.timeOffRepository
       .createQueryBuilder('timeOff')
@@ -134,6 +142,7 @@ export class AppointmentsService {
       startDate ?? appointment.startDate,
       endDate ?? appointment.endDate,
       userId,
+      id,
     );
 
     if (hasConflict) {
