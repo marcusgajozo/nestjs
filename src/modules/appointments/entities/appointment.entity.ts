@@ -3,6 +3,8 @@ import { ClientEntity } from 'src/modules/clients/entities/client.entity';
 import { ProcedureEntity } from 'src/modules/procedures/entities/procedure.entity';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, RelationId } from 'typeorm';
+import { NotifyReturnClientEnum } from '../enums/notify-client.enum';
+import { StatusAppointmentEnum } from '../enums/status-appointment.enum';
 
 @Entity('appointments')
 export class AppointmentEntity extends BaseEntity {
@@ -26,6 +28,22 @@ export class AppointmentEntity extends BaseEntity {
 
   @Column({ type: 'timestamp', name: 'end_date' })
   endDate: string;
+
+  @Column({
+    type: 'enum',
+    enum: NotifyReturnClientEnum,
+    default: NotifyReturnClientEnum.PENDING_NOTIFICATION,
+    name: 'notify_client',
+  })
+  notifyReturnClient: NotifyReturnClientEnum;
+
+  @Column({
+    type: 'enum',
+    enum: StatusAppointmentEnum,
+    default: StatusAppointmentEnum.SCHEDULED,
+    name: 'status_appointment',
+  })
+  statusAppointment: StatusAppointmentEnum;
 
   @ManyToOne(() => ClientEntity, (client) => client.appointments, {
     nullable: true,
