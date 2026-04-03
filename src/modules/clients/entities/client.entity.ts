@@ -1,6 +1,14 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { AppointmentEntity } from 'src/modules/appointments/entities/appointment.entity';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, RelationId } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  RelationId,
+} from 'typeorm';
 
 @Entity('clients')
 export class ClientEntity extends BaseEntity {
@@ -16,4 +24,7 @@ export class ClientEntity extends BaseEntity {
 
   @RelationId((client: ClientEntity) => client.user)
   userId: string;
+
+  @OneToMany(() => AppointmentEntity, (appointment) => appointment.client)
+  appointments: AppointmentEntity[];
 }

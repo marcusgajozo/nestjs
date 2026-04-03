@@ -4,14 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { I18nService } from 'nestjs-i18n';
 import { PaginationQueryDto } from 'src/common/dtos/pagination.dto';
+import { I18nTranslations } from 'src/generated/i18n.generated';
 import { Repository } from 'typeorm';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { AppointmentEntity } from './entities/appointment.entity';
-import { DayOfWeek } from 'src/common/enums/day-of-week.enum';
-import { I18nService } from 'nestjs-i18n';
-import { I18nTranslations } from 'src/generated/i18n.generated';
 
 @Injectable()
 export class AppointmentsService {
@@ -21,20 +20,19 @@ export class AppointmentsService {
     private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
-  async verifyConflictTemplate(
-    dayOfWeek: DayOfWeek,
-    startTime: string,
-    endTime: string,
+  async verifyConflictAppointment(
+    startDate: string,
+    endDate: string,
     userId: string,
   ) {
     const conflictCount = await this.appointmentRepository
-      .createQueryBuilder('template')
+      .createQueryBuilder('appointment')
 
-      .where('template.user.id = :userId', { userId })
-      .andWhere('template.dayOfWeek = :dayOfWeek', { dayOfWeek })
+      .where('appointment.user.id = :userId', { userId })
 
-      .andWhere('template.startTime < :endTime', { endTime })
-      .andWhere('template.endTime > :startTime', { startTime })
+      .andWhere('appointment.startDate < :endDate', { endDate })
+      .andWhere('appointment.endDate > :startDate', { startDate })
+      .andWhere('appointment.deletedAt IS NULL')
 
       .getCount();
 
@@ -42,12 +40,21 @@ export class AppointmentsService {
   }
 
   async create(createAppointmentDto: CreateAppointmentDto, userId: string) {
-    const { dayOfWeek, endTime, startTime } = createAppointmentDto;
+    const {
+      endDate,
+      startDate,
+      clientId,
+      clientName,
+      phoneClient,
+      procedureFollowUpDays,
+      procedureId,
+      procedureName,
+      procedurePrice,
+    } = createAppointmentDto;
 
-    const hasConflict = await this.verifyConflictTemplate(
-      dayOfWeek,
-      startTime,
-      endTime,
+    const hasConflict = await this.verifyConflictAppointment(
+      startDate,
+      endDate,
       userId,
     );
 
@@ -58,10 +65,16 @@ export class AppointmentsService {
     }
 
     const appointment = this.appointmentRepository.create({
-      dayOfWeek,
-      endTime,
-      startTime,
+      endDate,
+      startDate,
+      clientName,
+      phoneClient,
+      procedureFollowUpDays,
+      procedureName,
+      procedurePrice,
       user: { id: userId },
+      client: { id: clientId },
+      procedure: { id: procedureId },
     });
 
     return await this.appointmentRepository.save(appointment);
@@ -99,12 +112,21 @@ export class AppointmentsService {
   ) {
     const appointment = await this.findOne(id, userId);
 
-    const { dayOfWeek, endTime, startTime } = updateAppointmentDto;
+    const {
+      endDate,
+      startDate,
+      clientId,
+      clientName,
+      phoneClient,
+      procedureFollowUpDays,
+      procedureId,
+      procedureName,
+      procedurePrice,
+    } = updateAppointmentDto;
 
-    const hasConflict = await this.verifyConflictTemplate(
-      dayOfWeek ?? appointment.dayOfWeek,
-      startTime ?? appointment.startTime,
-      endTime ?? appointment.endTime,
+    const hasConflict = await this.verifyConflictAppointment(
+      startDate ?? appointment.startDate,
+      endDate ?? appointment.endDate,
       userId,
     );
 
@@ -117,10 +139,16 @@ export class AppointmentsService {
     const updatedAt = new Date();
 
     return await this.appointmentRepository.update(appointment.id, {
-      dayOfWeek,
-      endTime,
-      startTime,
+      endDate,
+      startDate,
+      clientName,
+      phoneClient,
+      procedureFollowUpDays,
+      procedureName,
+      procedurePrice,
       updatedAt,
+      client: { id: clientId },
+      procedure: { id: procedureId },
     });
   }
 

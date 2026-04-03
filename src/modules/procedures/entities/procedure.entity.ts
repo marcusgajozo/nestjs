@@ -1,6 +1,14 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { AppointmentEntity } from 'src/modules/appointments/entities/appointment.entity';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, RelationId } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  RelationId,
+} from 'typeorm';
 
 @Entity('procedures')
 export class ProcedureEntity extends BaseEntity {
@@ -25,4 +33,10 @@ export class ProcedureEntity extends BaseEntity {
 
   @RelationId((procedure: ProcedureEntity) => procedure.user)
   userId: string;
+
+  @OneToMany(() => AppointmentEntity, (appointment) => appointment.procedure)
+  appointments: AppointmentEntity[];
+
+  @RelationId((procedure: ProcedureEntity) => procedure.appointments)
+  appointmentIds: string[];
 }

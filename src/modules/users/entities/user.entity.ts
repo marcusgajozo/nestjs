@@ -1,4 +1,5 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { AppointmentEntity } from 'src/modules/appointments/entities/appointment.entity';
 import { ClientEntity } from 'src/modules/clients/entities/client.entity';
 import { ProcedureEntity } from 'src/modules/procedures/entities/procedure.entity';
 import { ScheduleTemplateEntity } from 'src/modules/schedule-templates/entities/schedule-template.entity';
@@ -27,4 +28,7 @@ export class UserEntity extends BaseEntity {
     (scheduleTemplate) => scheduleTemplate.user,
   )
   scheduleTemplates: ScheduleTemplateEntity[];
+
+  @OneToMany(() => AppointmentEntity, (appointment) => appointment.user)
+  appointments: AppointmentEntity[];
 }
