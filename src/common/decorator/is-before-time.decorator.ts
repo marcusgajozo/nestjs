@@ -4,7 +4,7 @@ import {
   ValidationOptions,
 } from 'class-validator';
 
-export function IsBefore(
+export function IsBeforeTime(
   property: string,
   validationOptions?: ValidationOptions,
 ) {
@@ -31,7 +31,7 @@ export function IsBefore(
 
   return (object: object, propertyName: string) => {
     registerDecorator({
-      name: 'isBefore',
+      name: 'isBeforeTime',
       target: object.constructor,
       propertyName,
       constraints: [property],
