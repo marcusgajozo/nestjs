@@ -4,7 +4,11 @@
 
 @accessToken = {{signIn.response.body.data.access_token}}
 
-@scheduleTemplateId = ec7d4d56-0658-41d5-b8c0-71d6b7401f06
+@appointmentId = 26bd504c-384b-4f11-9d86-1c4d608aa832
+
+@clientId = 8aae51df-a9e1-4a15-88cd-083653afb4f1
+
+@procedureId = 3fa25533-d19e-4a25-a57c-b5afbb935195
 
 ### Authentication sign in
 
@@ -24,25 +28,29 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "dayOfWeek": "monday",
-  "startTime": "19:11",
-  "endTime": "20:12"
+  "clientId": "{{clientId}}",
+  "procedureId": "{{procedureId}}",
+  "startDate": "2024-06-01T19:11:00Z",
+  "endDate": "2024-06-12T20:12:00Z"
 }
 
 ### Update an appointment
 
-PATCH {{baseUrl}}/appointments/{{scheduleTemplateId}} HTTP/1.1
+PATCH {{baseUrl}}/appointments/{{appointmentId}} HTTP/1.1
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "dayOfWeek": "monday",
-  "endTime": "21:10"
+  "clientId": "{{clientId}}",
+  "procedureId": "{{procedureId}}",
+  "startDate": "2024-06-01T19:11:00Z",
+  "endDate": "2024-07-01T20:12:00Z",
+  "notifyReturnClient": "notified"
 }
 
 ### Get an appointment
 
-GET {{baseUrl}}/appointments/{{scheduleTemplateId}} HTTP/1.1
+GET {{baseUrl}}/appointments/{{appointmentId}} HTTP/1.1
 Authorization: Bearer {{accessToken}}
 
 ### Get all appointments
@@ -50,6 +58,6 @@ Authorization: Bearer {{accessToken}}
 GET {{baseUrl}}/appointments HTTP/1.1
 Authorization: Bearer {{accessToken}}
 
-### Delete a schedule-template
-DELETE {{baseUrl}}/appointments/{{scheduleTemplateId}} HTTP/1.1
+### Delete an appointment
+DELETE {{baseUrl}}/appointments/{{appointmentId}} HTTP/1.1
 Authorization: Bearer {{accessToken}}
