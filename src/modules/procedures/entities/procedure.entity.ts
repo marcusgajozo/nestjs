@@ -12,10 +12,10 @@ import {
 
 @Entity('procedures')
 export class ProcedureEntity extends BaseEntity {
-  @Column()
+  @Column({ type: 'text', nullable: true })
   name: string;
 
-  @Column()
+  @Column({ type: 'text', nullable: true })
   description: string;
 
   @Column({ type: 'int', default: 0 })
